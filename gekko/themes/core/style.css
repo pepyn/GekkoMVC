@@ -1,0 +1,22 @@
+/*
+*
+*		Style.css: Core theme for Gekko
+*
+*/
+
+/*
+*	Structure 
+*/
+
+html,body{
+	font-family: georgia, sans-serif;
+	font-size:15px;
+	background-color: #f6f6f6;
+}
+
+/*Text elements*/
+h1{font-color:#FF0000;}
+
+h2{}
+
+p{}
