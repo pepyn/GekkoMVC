@@ -2,47 +2,64 @@
 //CCDeveloper.php
 //A controller class for testing the Gekko Framework
 
-class CCDeveloper implements IController {
+class CCDeveloper extends CObject implements IController {
 
+	//Constructor
+
+	public function __construct() {
+		parent::construct();
+	}
 	//Implementing IController: all controllers must have an index
 
 	public function Index(){
 		$this->Menu();
 		}
+		
+	//DisplayObject:
+
+	public function DisplayObject() {
+
+		$this->Menu();
+
+		$this->data['main'] .= <<<EOD
+		<h2>Dumping content of CDeveloper:</h2>
+		<p>What follows is the content of the controller, including the properties of CObject</p>
+EOD;
+
+		$this->data['main'] .= '<pre>' . htmlentities(print_r($this, true)) . '</pre>';
+	}
 
 	//Function Links()
 
 	public function Links() {
-
-		$gg = CGekko::Instance();
 
 		$this->Menu();
 
 		//Create a variable that stores the current Url
 
 		$url = 'developer/links';
-		$current = $gg->request->CreateUrl($url);
+		$current = $this->request->CreateUrl($url);
 
 		//Create a variable that stores the default url
 
-		$gg->request->cleanUrl = false;
-		$gg->request->querystringUrl = false;
-		$default = $gg->request->CreateUrl($url);
+		$this->request->cleanUrl = false;
+		$this->request->querystringUrl = false;
+		$default = $this->request->CreateUrl($url);
 
 		//Create a variable that stores the clean url
 
-		$gg->request->cleanUrl = true;
-		$clean = $gg->request->CreateUrl($url);
+		$this->request->cleanUrl = true;
+		$clean = $this->request->CreateUrl($url);
 
 		//Create a variable that stores the querystring type url
 
-		$gg->request->cleanUrl = false;
-		$gg->request->querystringUrl = true;
-		$querystring = $gg->request->CreateUrl($url);
+		$this->request->cleanUrl = false;
+		$this->request->querystringUrl = true;
+		$querystring = $this->request->CreateUrl($url);
 
 		//Add the variables created to the data array so they can be displayed in the content body
 
-		$gg->data['main'] .= <<<EOD
+		$this->data['main'] .= <<<EOD
 			<h2>CRequest::CreateUrl()</h2>
 			<p>This method creates URLs to the same page, but gets there using different settings.</p>
 			<ul>
@@ -59,22 +76,20 @@ EOD;
 
 		private function Menu(){
 
-			$gg = CGekko::Instance();
-
-			$menu = array('developer', 'developer/index', 'developer/links');
+			$menu = array('developer', 'developer/index', 'developer/links', 'developer/display-object');
 
 			$html=null;
 
 				foreach ($menu as $val) {
 
-					$html .= "<li> <a href='" . $gg->request->CreateUrl($val) . "'>" . $val . "</a>";
+					$html .= "<li> <a href='" . $this->request->CreateUrl($val) . "'>" . $val . "</a>";
 				}
 
-			$gg->data['title'] = "The Developer Controller";
+			$this->data['title'] = "The Developer Controller";
 
-			$gg->data['header'] = "<h1>The Developer Controller</h1>";
+			$this->data['header'] = "<h1>The Developer Controller</h1>";
 
-			$gg->data['main'] = "<p>Choose an option:</p><ul>" . $html . "</ul>";
+			$this->data['main'] = "<p>Choose an option:</p><ul>" . $html . "</ul>";
 		} # end function Menu()
 
 } # end class

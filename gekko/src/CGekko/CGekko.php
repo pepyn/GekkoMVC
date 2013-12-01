@@ -15,7 +15,25 @@ class CGekko implements ISingleton {
 
 		require(GEKKO_SITE_PATH.'/config.php');
 
+    // Create a database object.
+      if(isset($this->config['database'][0]['dsn'])) {
+        $this->db = new CMDatabase($this->config['database'][0]['dsn']);
+      }
+
+    //Create container for views + themes
+
+      $this->views = new CViewContainer();
+
+    //Start a named session
+
+      session_name($this->config['session_name']);
+
+      session_start();
+
+      $this->session = new CSession($this->config['session_key']);
+      $this->session->PopulateFromSession();
 	}
+
 
 //Singleton pattern ensures only one instance can exist
 
@@ -59,6 +77,7 @@ class CGekko implements ISingleton {
     if($controllerExists && $controllerEnabled && $classExists) {
       $rc = new ReflectionClass($className);
       if($rc->implementsInterface('IController')) {
+        $formattedMethod = str_replace(array('_', '-'), '', $method);
         if($rc->hasMethod($method)) {
           $controllerObj = $rc->newInstance();
           $methodObj = $rc->getMethod($method);
@@ -101,7 +120,8 @@ class CGekko implements ISingleton {
     	
     	$gg = &$this;
 
-    	
+    	include(GEKKO_INSTALL_PATH . '/themes/functions.php');
+
     	$functionsPath = "{$themePath}/functions.php";
     	
     		if(is_file($functionsPath)) {
@@ -112,7 +132,7 @@ class CGekko implements ISingleton {
     	// Extract $gg->data to own variables and handover to the template file
     	
     	extract($this->data);      
-    	
+    	extract($this->views->GetData());
     	include("{$themePath}/default.tpl.php");
   }
 

@@ -28,7 +28,7 @@ class CRequest {
 
   //CreateUrl(): Function to create a URL depending on the url type
 
-   public function CreateUrl($url=null) {
+   public function CreateUrl($url=null, $method=null;) {
 
     $prepend = $this->base_url;
 
@@ -39,7 +39,7 @@ class CRequest {
     } else {
       $prepend .= 'index.php/';
     }
-    return $prepend . rtrim($url, '/');
+    return $prepend . rtrim($url/$method, '/');
   }
 
   /**

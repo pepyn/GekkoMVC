@@ -9,8 +9,16 @@
 	error_reporting(-1);
 	ini_set('display_errors', 1);
 
-	$debugEnable = TRUE; //true: debug info is displayed, false: debug info hidden
-	$debug="";
+//Set database(s)
+	$gg->config['database'][0]['dsn'] = 'sqlite:' . GEKKO_SITE_PATH . '/data/.ht.sqlite';
+
+//Set debugging
+	$gg->config['debug']['session'] = true;
+	$gg->config['debug']['timer'] = true;
+	$gg->config['debug']['gekko'] = true;
+	$gg->config['debug']['display-gekko'] = true;
+	$gg->config['debug']['db-num-queries'] = true;
+	$gg->config['debug']['db-queries'] = true;
 
 //Handle base URL
 	$gg->config['base_url'] = null;
@@ -25,6 +33,7 @@
 // Define name of current session
 
 	$gg->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]);
+	$gg->config['session_key'] = 'gekko';
 
 // Define timezone server is located in
 

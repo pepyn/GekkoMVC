@@ -28,7 +28,9 @@
 	$gg->data['footer'] = '<p>The Gekko Footer: &copy; Pepyn Swagemakers</p>';
 
 
-// Log debugging information
+/*
+*	Log debugging information
+*/
 
 	function get_debug() {
 
@@ -59,6 +61,36 @@
 		
 		}
 
+		return $html;
+	}
+
+	/*
+	* Render all views
+	*/	
+
+	function render_views(){
+
+		return CGekko::Instance()->views->render();
+	
+	}
+
+	/*
+	*	Get messages form flash-session
+	*/
+
+	function get_messages_from_session() {
+
+		$messages = CGekko::Instance()->session->GetMessages();
+		$html = null;
+
+		if(!empty($messages)) {
+
+			foreach ($messages as $val) {
+				$valid = array('info', 'notice', 'success', 'warning', 'error', 'alert');
+				$class = (in_array($val['type'], $valid)) ? $val['type'] : 'info';
+				$html .= "<div class='$class'>{$val['message']}</div>\n";
+			}
+		}
 
 		return $html;
 	}
